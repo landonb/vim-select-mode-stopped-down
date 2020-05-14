@@ -1,0 +1,96 @@
+*vim-select-mode-stopped-down.txt*   (Subjectively) Improves select-mode Ctrl-Shift-Left/-Right.
+
+                                     *vim-select-mode-stopped-down-author*
+Author: Landon Bouma <http://github.com/landonb>
+License: CC0 1.0 Public Domain (see `:e LICENSE`)
+
+===========================================================================
+CONTENTS                             *vim-select-mode-stopped-down-contents*
+
+Documentation Index ~
+
+1. Introduction                      |vim-select-mode-stopped-down-introduction|
+2. Key Commands                      |vim-select-mode-stopped-down-key-commands|
+3. Configuration                     |vim-select-mode-stopped-down-configuration|
+
+===========================================================================
+INTRODUCTION                         *vim-select-mode-stopped-down-introduction*
+
+Tweaked `select-mode` <Ctrl-Shift-Left> and <Ctrl-Shift-Right> motions,
+changes builtin `behave mswin` selection behavior.
+
+Project page:
+
+  https://github.com/landonb/vim-select-mode-stopped-down
+
+About this plugin:
+
+  If you like to select text with shift-arrow motions,
+  rather than using Vim's (admittedly more powerful)
+  Visual mode commands, this plugin might be for you!
+
+  When you call `behave mswin`, Vim maps the <Ctrl-Shift-Left>
+  and <Ctrl-Shift-Right> keys to selecting text by the word-full.
+
+  But the default `select-mode` behavior — at least in
+  my opinion — is not quite perfect. I find it works well
+  in some situations, but for some uses, I usually need to modify
+  my selection with single-character <Shift-Left> or <Shift-Right>
+  adjustments.
+
+  This plugin tweaks the <Ctrl-Shift-Left> and <Ctrl-Shift-Right>
+  behavior to make smaller selections, stopping at more column
+  positions than the default builtin functionality.
+
+  See also: `:help select-mode`
+
+This plugin is only available if 'compatible' is not set,
+and if `behave mswin` has been called.
+
+===========================================================================
+KEY COMMANDS                         *vim-select-mode-stopped-down-key-commands*
+
+This plugin overrides how <Ctrl-Shift-Left> and <Ctrl-Shift-Right> behave.
+
+The following changes are applied to the default behavior:
+
+- The selection will stop before and after a line break,
+  whether selecting forward or selecting reverse.
+
+- The selection will stop between line-starting whitespace and
+  the first word on the line.
+
+- The selection will stop between the penultimate column and the
+  final column of the line if the second-to-last character is a
+  keyword character, and the final character is punctuation.
+  (Otherwise, e.g., selecting left on a line that reads like
+  "this text. And this." from the final column would first
+  select "this.", then "And this.", then ". And this.", which
+  just doesn't feel right. So adds initial selection of just ".".
+
+- The selection handles exclusive/inclusive motions as appropriate.
+  E.g., by default, select is exclusive, so if the cursor is on the
+  final column of a line, selecting leftward excludes the final
+  character. But this plugin will assume that if you're selecting
+  leftward from the rightmost column, that you probably also want
+  to include the rightmost character.
+
+==============================================================================
+CONFIGURATION                        *vim-select-mode-stopped-down-configuration*
+
+Custom Key Bindings ~
+
+To provide your own bindings, set the no-mappings global,
+and then map the key bindings from your own code, e.g., >
+
+  let g:vim_select_mode_stopped_down_no_mappings = 1
+
+  nnoremap <silent> <C-S-Left> :<C-U>call <SID>extend_selection_by_word_reverse('n')<CR>
+  inoremap <silent> <C-S-Left> <C-O>:<C-U>call <SID>extend_selection_by_word_reverse('i')<CR>
+  vnoremap <silent> <C-S-Left> :<C-U>call <SID>extend_selection_by_word_reverse('v')<CR>
+
+  nnoremap <silent> <C-S-Right> :<C-U>call <SID>extend_selection_by_word_forward('n')<CR>
+  inoremap <silent> <C-S-Right> <C-O>:<C-U>call <SID>extend_selection_by_word_forward('i')<CR>
+  vnoremap <silent> <C-S-Right> :<C-U>call <SID>extend_selection_by_word_forward('v')<CR>
+<
+ vim:tw=78:ts=8:ft=help:norl:
