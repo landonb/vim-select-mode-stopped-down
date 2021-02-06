@@ -593,6 +593,12 @@ function! s:extend_selection_by_word_forward(mode)
     \)
 
   let @/ = l:last_pttrn
+
+  " 2021-02-01: Not sure why, nor not sure why `silent!` prefixes are
+  " not doing the trick, but it seems (by way of process of narrowing
+  " it down using `echom` tracing) that `let @/ =` (and `silent! let`)
+  " is echoing to the command window. Which we kludgely hide thusly:
+  echo ""
 endfunction
 
 " ***
