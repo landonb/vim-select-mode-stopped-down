@@ -5,7 +5,7 @@
 "
 " -------------------------------------------------------------------
 
-function! s:forward_text_next_word(mode, curc) abort
+function! g:embrace#alt_word_motion#forward_text_next_word(mode, curc) abort
   " If radjust set at end of function, nudges cursor one more right.
   let radjust = 0
   " HINTS: Use virtcol(), not col(), to account for Unicode/mutli-byte characters.
@@ -291,8 +291,8 @@ function! s:wire_keys_word_motions_rightward() abort
   " Note that a simple `e` is not robust enough to implement the behavior
   " we want, so defer to a more complicated function.
   " - And, reminder: 'CTRL-U (<C-U>) removes the range that Vim may insert.'
-  nnoremap <silent> <C-Right> :<C-U>call <SID>forward_text_next_word('n', -1)<CR>
-  inoremap <silent> <C-Right> <C-\><C-O>:call <SID>forward_text_next_word('i', -1)<CR>
+  nnoremap <silent> <C-Right> :<C-U>call g:embrace#alt_word_motion#forward_text_next_word('n', -1)<CR>
+  inoremap <silent> <C-Right> <C-\><C-O>:call g:embrace#alt_word_motion#forward_text_next_word('i', -1)<CR>
   " Don't vmap C-Right, or after C-S-Right it'll keep selecting without
   " Shift pressed anymore, i.e., if we were to add this visual mode map:
   "   vnoremap <C-Right> e
@@ -305,7 +305,7 @@ endfunction
 
 " -------------------------------------------------------------------
 
-function! g:embrace#word_motion_ctrl_lr#inject_maps_word_motions() abort
+function! g:embrace#alt_word_motion#inject_maps_word_motions() abort
   call <SID>free_keys_word_motions()
   call <SID>wire_keys_word_motions()
 endfunction

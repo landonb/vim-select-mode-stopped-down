@@ -30,7 +30,7 @@ function! s:vim_select_mode_stopped_down_create_maps() abort
     return
   endif
 
-  call g:embrace#word_motion_ctrl_lr#inject_maps_word_motions()
+  call g:embrace#alt_word_motion#inject_maps_word_motions()
   call g:embrace#alt_select_motion#inject_maps_extend_selection_by_word()
 endfunction
 

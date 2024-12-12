@@ -116,3 +116,9 @@ and then map the key bindings from your own code, e.g.,::
   inoremap <silent> <C-S-Right> <C-O>:<C-U>call g:embrace#alt_select_motion#extend_selection_by_word_forward('i')<CR>
   vnoremap <silent> <C-S-Right> :<C-U>call g:embrace#alt_select_motion#extend_selection_by_word_forward('v')<CR>
 
+  nnoremap <C-Left> b
+  inoremap <C-Left> <C-O>b
+
+  nnoremap <silent> <C-Right> :<C-U>call g:embrace#alt_word_motion#forward_text_next_word('n', -1)<CR>
+  inoremap <silent> <C-Right> <C-\><C-O>:call g:embrace#alt_word_motion#forward_text_next_word('i', -1)<CR>
+
