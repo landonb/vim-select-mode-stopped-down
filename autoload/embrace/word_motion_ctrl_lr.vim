@@ -5,26 +5,6 @@
 "
 " -------------------------------------------------------------------
 
-" YOU: 1.) Uncomment the `let` to enable this feature; then
-"      2.) Use <F9> to reload this script.
-"      - HINT: <F9> defined by: landonb/dubs_ftype_mess or run:
-"        noremap <silent><buffer> <F9> :exec 'source '.bufname('%')<CR>
-"
-"  let s:reloadable = 1
-if exists("s:reloadable") && s:reloadable &&
-    \ exists("g:loaded_vim_ctrl_left_right_word_motions")
-  unlet g:loaded_vim_ctrl_left_right_word_motions
-endif
-
-" ***
-
-if exists("g:loaded_vim_ctrl_left_right_word_motions") || &cp
-  finish
-endif
-let g:loaded_vim_ctrl_left_right_word_motions = 1
-
-" -------------------------------------------------------------------
-
 function! s:forward_text_next_word(mode, curc) abort
   " If radjust set at end of function, nudges cursor one more right.
   let radjust = 0

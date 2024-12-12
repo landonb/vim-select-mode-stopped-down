@@ -5,26 +5,6 @@
 
 " -------------------------------------------------------------------
 
-" YOU: 1.) Uncomment the `let` to enable this feature; then
-"      2.) Use <F9> to reload this script.
-"      - HINT: <F9> defined by: landonb/dubs_ftype_mess or run:
-"        noremap <silent><buffer> <F9> :exec 'source '.bufname('%')<CR>
-"
-"  let s:reloadable = 1
-if exists("s:reloadable") && s:reloadable &&
-    \ exists("g:loaded_vim_select_mode_stopped_down")
-  unlet g:loaded_vim_select_mode_stopped_down
-endif
-
-" ***
-
-if exists("g:loaded_vim_select_mode_stopped_down") || &cp
-  finish
-endif
-let g:loaded_vim_select_mode_stopped_down = 1
-
-" -------------------------------------------------------------------
-
 function! s:trace_current_column_position(mode, dir) abort
   if g:embrace#trace#trace_level() <= 1 | return | endif
 
