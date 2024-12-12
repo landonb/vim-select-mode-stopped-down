@@ -37,13 +37,13 @@ let s:_trace_level = 0
 "  let s:_trace_level = 1
 "  let s:_trace_level = 2
 
-function! trace#trace(msg)
+function! g:embrace#trace#trace(msg)
   if s:_trace_level > 0
     echom a:msg
   endif
 endfunction
 
-function! trace#trace_level()
+function! g:embrace#trace#trace_level()
   return s:_trace_level
 endfunction
 

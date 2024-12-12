@@ -78,7 +78,7 @@ endfunction
 function! s:forward_handle_if_on_empty_line(vcol_last, trace_vars)
   if a:vcol_last != 1 | return 0 | endif
 
-  call trace#trace("Empty line: " . a:trace_vars)
+  call g:embrace#trace#trace("Empty line: " . a:trace_vars)
   call s:cursor_nudge_one_character_right()
   return 1
 endfunction
@@ -98,7 +98,7 @@ function! s:forward_handle_if_in_leading_whitespace(vcol_curr, vcol_visi, trace_
   " The cursor is at or near the start of the line, with one or more whitespace
   " between it and the first character in the line. So jump to the first \< word
   " beginning (which is what ^ does).
-  call trace#trace("Stop on first: " . a:trace_vars)
+  call g:embrace#trace#trace("Stop on first: " . a:trace_vars)
   normal! ^
   return 1
 endfunction
@@ -120,7 +120,7 @@ function! s:forward_handle_if_at_penultimate(mode, vcol_curr, vcol_last, trace_v
   let penult_col = a:mode == 'i' ? (a:vcol_last - 1) : (a:vcol_last - 2)
   if a:vcol_curr != l:penult_col | return 0 | endif
 
-  call trace#trace("At penult: vcol_curr: " . a:vcol_curr . " / vcol_last: " . a:vcol_last
+  call g:embrace#trace#trace("At penult: vcol_curr: " . a:vcol_curr . " / vcol_last: " . a:vcol_last
     \ . " / " . a:trace_vars
     \)
   normal! $
@@ -166,7 +166,7 @@ function! s:forward_move_cursor_from_first_postition(trace_vars)
   let char_0 = strgetchar(getline('.'), 0)
   " Also determine the character size, to position the cursor properly.
   let nbytes = strlen(nr2char(l:char_0))
-  call trace#trace("char_0: " . nr2char(l:char_0)
+  call g:embrace#trace#trace("char_0: " . nr2char(l:char_0)
     \ . " (strlen: " . strlen(l:char_0) . " / nbytes: " . l:nbytes . ")"
     \ . " / " . a:trace_vars)
 
@@ -240,7 +240,7 @@ function! s:forward_move_cursor_from_col_inner_or_last(
     endif
   endif
 
-  call trace#trace(l:audittrace . ": "
+  call g:embrace#trace#trace(l:audittrace . ": "
     \ . " / vcol_after_he: " . l:vcol_after_he
     \ . " / virtcol('.'): " . virtcol(".")
     \ . " / virtcol('$'): " . virtcol("$")

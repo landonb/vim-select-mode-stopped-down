@@ -26,7 +26,7 @@ let g:loaded_vim_select_mode_stopped_down = 1
 " ========================================================================
 
 function! s:trace_current_column_position(mode, dir)
-  if trace#trace_level() <= 1 | return | endif
+  if g:embrace#trace#trace_level() <= 1 | return | endif
 
   let prefix = a:dir == 'fwd' ? 'fwd(1)' : 'rwd(-1)'
   echom l:prefix . ": a:mode: " . a:mode
@@ -40,7 +40,7 @@ endfunction
 " ------------------------------------------------------------------------
 
 function! s:trace_selection_bounds(calln)
-  if trace#trace_level() <= 1 | return | endif
+  if g:embrace#trace#trace_level() <= 1 | return | endif
 
   let prefix = "selection/" . a:calln
   echom l:prefix . ":    virtcol(v):  " . string(virtcol("v"))
@@ -276,8 +276,8 @@ function! s:prepare_selection_session(dirn, mode)
     let next_bytes = strgetchar(l:snippet, 0)
     let next_char = nr2char(l:next_bytes)
     let nextchlen = len(l:next_char)
-    if trace#trace_level() > 1
-      call trace#trace("- next_coln:"
+    if g:embrace#trace#trace_level() > 1
+      call g:embrace#trace#trace("- next_coln:"
         \ . " snippet: " . l:snippet
         \ . " / next_bytes: " . l:next_bytes
         \ . " / next_char: " . l:next_char
@@ -299,8 +299,8 @@ function! s:prepare_selection_session(dirn, mode)
     let prev_bytes = strgetchar(l:ref_line, l:virt_coln - 1)
     let prev_char = nr2char(l:prev_bytes)
     let prevchlen = len(l:prev_char)
-    if trace#trace_level() > 1
-      call trace#trace("- prev_coln:"
+    if g:embrace#trace#trace_level() > 1
+      call g:embrace#trace#trace("- prev_coln:"
         \ . " prev_bytes: " . l:prev_bytes
         \ . " / prev_char: " . l:prev_char
         \ . " / prevchlen: " . l:prevchlen
@@ -367,7 +367,7 @@ function! s:extend_selection_by_word_reverse(mode)
     " the line ends with [:punct:], then the punction and newline are added
     " to the selection.
     let @/ = "\\n"
-    call trace#trace("RWD: first col: line break: " . l:trace_vars)
+    call g:embrace#trace#trace("RWD: first col: line break: " . l:trace_vars)
   endif
 
   " Note that mode() == 'v' does not work here because, e.g., inoremap
@@ -383,7 +383,7 @@ function! s:extend_selection_by_word_reverse(mode)
       "      normal! gvN
     silent! normal! N
     if l:was_wrapscan | set wrapscan | endif
-    call trace#trace("RWD: visual mode: " . l:trace_vars)
+    call g:embrace#trace#trace("RWD: visual mode: " . l:trace_vars)
   else
     let nrmlc = ''
     " Check if on special-case column, such as first, second, or final column.
@@ -391,13 +391,13 @@ function! s:extend_selection_by_word_reverse(mode)
       " Enter visual mode (`v`), and search r-ward using MRU search pattern (`gN`).
       " See also, set above: let @/ = "\\n", such that slow-walks across newlines.
       let nrmlc = 'vgN'
-      call trace#trace("RWD: first col: insert mode: " . l:trace_vars)
+      call g:embrace#trace#trace("RWD: first col: insert mode: " . l:trace_vars)
     elseif l:virt_coln == 2 && l:line_nchars > 2
       " Because switched to normal mode, moving cursor left, to first column,
       " and then a `vgN` for some reason selects first two columns' characters,
       " rather than just first character/column.
       let nrmlc = 'hgN'
-      call trace#trace("RWD: second col: " . l:trace_vars)
+      call g:embrace#trace#trace("RWD: second col: " . l:trace_vars)
     " - Note: On an empty line, both return col(".") and col("$") return 1,
     "   so use >=, not ==; or use <. (Otherwise, col("$") is 1 more than length,
     "   and col(".") is at most length, but virt_coln == col("$") if you Ctrl-O
@@ -414,7 +414,7 @@ function! s:extend_selection_by_word_reverse(mode)
       " otherwise character under normal cursor (after character user expects
       " to be selected last) will get selected, too.
       let nrmlc = 'hvgN'
-      call trace#trace("RWD: inside col: " . l:trace_vars)
+      call g:embrace#trace#trace("RWD: inside col: " . l:trace_vars)
     else
       " Edge-case: If last character in the iskeyword character class and the
       " character before it is not, or vice versa, need to not `vgN` but just `gN`,
@@ -453,10 +453,10 @@ function! s:extend_selection_by_word_reverse(mode)
         \   || (l:isk_penult && !l:isk_ending)
         \   || (!l:isk_penult && l:isk_ending))
         let nrmlc = 'gN'
-        call trace#trace("RWD: final col/diff classes^: " . l:trace_isk . " / " . l:trace_vars)
+        call g:embrace#trace#trace("RWD: final col/diff classes^: " . l:trace_isk . " / " . l:trace_vars)
       else
         let nrmlc = 'vgN'
-        call trace#trace("RWD: final col/alike classes: " . l:trace_isk . " / " . l:trace_vars)
+        call g:embrace#trace#trace("RWD: final col/alike classes: " . l:trace_isk . " / " . l:trace_vars)
       endif
     endif
 
@@ -587,7 +587,7 @@ function! s:extend_selection_by_word_forward(mode)
 
   call s:ensure_select_mode()
 
-  call trace#trace("FWD: " . l:trace_prefix
+  call g:embrace#trace#trace("FWD: " . l:trace_prefix
     \ . ": ref_visi: " . l:ref_visi
     \ . " / " . l:trace_vars
     \)
@@ -614,7 +614,7 @@ function! s:get_leftmost_nonblank_byte_col(ref_lnum, ref_coln)
   "   command would be delayed.
   normal! ^
   let ref_visi = col(".")
-  "  call trace#trace("ref_visi: " . l:ref_visi)
+  "  call g:embrace#trace#trace("ref_visi: " . l:ref_visi)
   " Return to original position.
   call setpos('.', l:waspos)
   return l:ref_visi
