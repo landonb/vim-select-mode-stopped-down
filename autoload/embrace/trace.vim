@@ -30,20 +30,21 @@
 
 " ========================================================================
 
-" Trace levels: 0 to disable. 1 to see shorter `echom` messages. 2 for all tracing.
-let g:embrace_smsd_debug_level = 0
-" YOU: Uncomment to see trace messages.
+" USAGE: Uncomment to see trace messages. Or set yourself.
 "
-"  let g:embrace_smsd_debug_level = 1
-"  let g:embrace_smsd_debug_level = 2
+" let g:embrace_smsd_debug_level = 1
 
 function! g:embrace#trace#trace(msg) abort
-  if g:embrace_smsd_debug_level > 0
+  if g:embrace#trace#trace_level()
     echom a:msg
   endif
 endfunction
 
 function! g:embrace#trace#trace_level() abort
+  if !exists("g:embrace_smsd_debug_level")
+    let g:embrace_smsd_debug_level = 0
+  endif
+
   return g:embrace_smsd_debug_level
 endfunction
 
