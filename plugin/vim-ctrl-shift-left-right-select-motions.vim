@@ -3,7 +3,7 @@
 " Project: https://github.com/landonb/vim-select-mode-stopped-down#🛑
 " License: https://creativecommons.org/publicdomain/zero/1.0/
 
-" ========================================================================
+" -------------------------------------------------------------------
 
 " YOU: 1.) Uncomment the `let` to enable this feature; then
 "      2.) Use <F9> to reload this script.
@@ -23,7 +23,7 @@ if exists("g:loaded_vim_select_mode_stopped_down") || &cp
 endif
 let g:loaded_vim_select_mode_stopped_down = 1
 
-" ========================================================================
+" -------------------------------------------------------------------
 
 function! s:trace_current_column_position(mode, dir) abort
   if g:embrace#trace#trace_level() <= 1 | return | endif
@@ -37,7 +37,7 @@ function! s:trace_current_column_position(mode, dir) abort
   " echom l:prefix . ": v:count: " . v:count
 endfunction
 
-" ------------------------------------------------------------------------
+" -------------------------------------------------------------------
 
 function! s:trace_selection_bounds(calln) abort
   if g:embrace#trace#trace_level() <= 1 | return | endif
@@ -51,7 +51,7 @@ function! s:trace_selection_bounds(calln) abort
   echom l:prefix . ": rhs/getpos('>): " . string(getpos("'>"))
 endfunction
 
-" ========================================================================
+" -------------------------------------------------------------------
 
 " EXPLAINED: There's logic in select-leftward (extend_selection_by_word_reverse)
 " that uses [:keyword:] in the @/ regex (\\k) to decide what to do when the
@@ -137,7 +137,7 @@ endfunction
 "                 --------------  " a comment!
 "               ----------------    "   a comment!
 
-" ------------------------------------------------------------------------
+" -------------------------------------------------------------------
 
 " To handle the selection motion, we need to figure out where the cursor is.
 " - For normal and insert modes, where there is no selection already started,
@@ -334,7 +334,7 @@ function! s:prepare_selection_session(dirn, mode) abort
     \]
 endfunction
 
-" ========================================================================
+" -------------------------------------------------------------------
 
 function! s:extend_selection_by_word_reverse(mode) abort
   let last_pttrn = @/
@@ -468,7 +468,7 @@ function! s:extend_selection_by_word_reverse(mode) abort
   let @/ = l:last_pttrn
 endfunction
 
-" ========================================================================
+" -------------------------------------------------------------------
 
 function! s:extend_selection_by_word_forward(mode) abort
   let last_pttrn = @/
@@ -632,7 +632,7 @@ function! s:ensure_select_mode() abort
   execute "normal! \<C-G>"
 endfunction
 
-" ========================================================================
+" -------------------------------------------------------------------
 
 function! s:free_keys_extend_selection_by_word_reverse() abort
   silent! nunmap <C-S-Left>
@@ -673,7 +673,7 @@ function! s:inject_maps_extend_selection_by_word() abort
   call <SID>wire_keys_extend_selection_by_word()
 endfunction
 
-" ========================================================================
+" -------------------------------------------------------------------
 
 if !exists("g:vim_select_mode_stopped_down_no_mappings")
     \ || !g:vim_select_mode_stopped_down_no_mappings

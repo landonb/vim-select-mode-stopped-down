@@ -3,7 +3,7 @@
 " Project: https://github.com/landonb/vim-select-mode-stopped-down#🛑
 " License: https://creativecommons.org/publicdomain/zero/1.0/
 "
-" " ========================================================================
+" -------------------------------------------------------------------
 
 " YOU: 1.) Uncomment the `let` to enable this feature; then
 "      2.) Use <F9> to reload this script.
@@ -23,7 +23,7 @@ if exists("g:loaded_vim_ctrl_left_right_word_motions") || &cp
 endif
 let g:loaded_vim_ctrl_left_right_word_motions = 1
 
-" ========================================================================
+" -------------------------------------------------------------------
 
 function! s:forward_text_next_word(mode, curc) abort
   " If radjust set at end of function, nudges cursor one more right.
@@ -269,7 +269,7 @@ function! s:forward_text_suss_vcol_after_he() abort
   return l:vcol_after_he
 endfunction
 
-" ========================================================================
+" -------------------------------------------------------------------
 
 function! s:free_keys_word_motions_leftward() abort
   nunmap <C-Left>
@@ -328,7 +328,7 @@ function! s:inject_maps_word_motions() abort
   call <SID>wire_keys_word_motions()
 endfunction
 
-" ========================================================================
+" -------------------------------------------------------------------
 
 call <SID>inject_maps_word_motions()
 
