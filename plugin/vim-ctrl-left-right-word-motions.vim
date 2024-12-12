@@ -25,7 +25,7 @@ let g:loaded_vim_ctrl_left_right_word_motions = 1
 
 " ========================================================================
 
-function! s:forward_text_next_word(mode, curc)
+function! s:forward_text_next_word(mode, curc) abort
   " If radjust set at end of function, nudges cursor one more right.
   let radjust = 0
   " HINTS: Use virtcol(), not col(), to account for Unicode/mutli-byte characters.
@@ -60,7 +60,7 @@ endfunction
 
 " ***
 
-function! s:get_leftmost_nonblank_virt_col()
+function! s:get_leftmost_nonblank_virt_col() abort
   " Identify the leftmost column with a non-blank ┃character.
   let l:waspos = getpos(".")
   " - You can use ^ or _ to go to first character in line,
@@ -75,7 +75,7 @@ endfunction
 
 " ***
 
-function! s:forward_handle_if_on_empty_line(vcol_last, trace_vars)
+function! s:forward_handle_if_on_empty_line(vcol_last, trace_vars) abort
   if a:vcol_last != 1 | return 0 | endif
 
   call g:embrace#trace#trace("Empty line: " . a:trace_vars)
@@ -83,7 +83,7 @@ function! s:forward_handle_if_on_empty_line(vcol_last, trace_vars)
   return 1
 endfunction
 
-function! s:cursor_nudge_one_character_right()
+function! s:cursor_nudge_one_character_right() abort
   let was_ww = &whichwrap
   set whichwrap=l
   normal! l
@@ -92,7 +92,7 @@ endfunction
 
 " ***
 
-function! s:forward_handle_if_in_leading_whitespace(vcol_curr, vcol_visi, trace_vars)
+function! s:forward_handle_if_in_leading_whitespace(vcol_curr, vcol_visi, trace_vars) abort
   if a:vcol_curr >= a:vcol_visi | return 0 | endif
 
   " The cursor is at or near the start of the line, with one or more whitespace
@@ -105,7 +105,7 @@ endfunction
 
 " ***
 
-function! s:forward_handle_if_at_penultimate(mode, vcol_curr, vcol_last, trace_vars)
+function! s:forward_handle_if_at_penultimate(mode, vcol_curr, vcol_last, trace_vars) abort
   " - First consider if the cursor is at the penultimate position, i.e., one
   "   position before the end of the line (in which case just go to the end
   "   of the line, and avoid the more complicated logic that comes later).
@@ -129,7 +129,7 @@ endfunction
 
 " ***
 
-function! s:forward_handle_if_atop_single_char_line(mode, vcol_curr, vcol_last, trace_vars)
+function! s:forward_handle_if_atop_single_char_line(mode, vcol_curr, vcol_last, trace_vars) abort
   " Special case: Single-character line, and normal mode. Nudge cursor right, to next line.
   if a:mode != 'n' || a:vcol_last != 2 | return 0 | endif
 
@@ -139,7 +139,7 @@ endfunction
 
 " ***
 
-function! s:forward_handle_if_at_first_position(vcol_curr, trace_vars)
+function! s:forward_handle_if_at_first_position(vcol_curr, trace_vars) abort
   " Cursor is neither on an empty line, nor before the first column of the
   " first visible character, nor in normal mode about a single-character
   " line, nor is it at the penultimate position.
@@ -152,7 +152,7 @@ function! s:forward_handle_if_at_first_position(vcol_curr, trace_vars)
   return 1
 endfunction
 
-function! s:forward_move_cursor_from_first_postition(trace_vars)
+function! s:forward_move_cursor_from_first_postition(trace_vars) abort
   " Special case: First word in line starts in column 1 and is 1 character
   " long, and cursor is before the first word (between ^ and first character).
   " - If we simply 'e', the cursor jumps past the end of first word to the end
@@ -187,7 +187,7 @@ endfunction
 
 function! s:forward_move_cursor_from_col_inner_or_last(
   \ mode, vcol_curr, vcol_visi, trace_vars
-\)
+\) abort
   let radjust = 0
   let audittrace = ""
   " See where cursor would be if we nudged it left and then ran `e`.
@@ -251,7 +251,7 @@ endfunction
 
 " ***
 
-function! s:forward_text_suss_vcol_after_he()
+function! s:forward_text_suss_vcol_after_he() abort
   " Caller handled case where cursor is in first column or
   " on empty line, so do not need to worry from the `h` backing
   " up to the previous line; but we do need to be aware that the
@@ -271,23 +271,23 @@ endfunction
 
 " ========================================================================
 
-function! s:free_keys_word_motions_leftward()
+function! s:free_keys_word_motions_leftward() abort
   nunmap <C-Left>
   iunmap <C-Left>
 endfunction
 
-function! s:free_keys_word_motions_rightward()
+function! s:free_keys_word_motions_rightward() abort
   nunmap <C-Right>
   iunmap <C-Right>
 endfunction
 
-function! s:free_keys_word_motions()
+function! s:free_keys_word_motions() abort
   " Clear any existing mappings (makes this file reentrant).
   call s:free_keys_word_motions_leftward()
   call s:free_keys_word_motions_rightward()
 endfunction
 
-function! s:wire_keys_word_motions_leftward()
+function! s:wire_keys_word_motions_leftward() abort
   " MAYBE/2020-05-12: Make C-Left more like C-Right.
   " - Some quirks with using builtin `b`:
   "   - If there's a word on a line, two empty lines, and then the cursor
@@ -307,7 +307,7 @@ function! s:wire_keys_word_motions_leftward()
   "   vnoremap <C-Left> b
 endfunction
 
-function! s:wire_keys_word_motions_rightward()
+function! s:wire_keys_word_motions_rightward() abort
   " Note that a simple `e` is not robust enough to implement the behavior
   " we want, so defer to a more complicated function.
   " - And, reminder: 'CTRL-U (<C-U>) removes the range that Vim may insert.'
@@ -318,12 +318,12 @@ function! s:wire_keys_word_motions_rightward()
   "   vnoremap <C-Right> e
 endfunction
 
-function! s:wire_keys_word_motions()
+function! s:wire_keys_word_motions() abort
   call s:wire_keys_word_motions_leftward()
   call s:wire_keys_word_motions_rightward()
 endfunction
 
-function! s:inject_maps_word_motions()
+function! s:inject_maps_word_motions() abort
   call <SID>free_keys_word_motions()
   call <SID>wire_keys_word_motions()
 endfunction

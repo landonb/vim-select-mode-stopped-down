@@ -37,13 +37,13 @@ let g:embrace_smsd_debug_level = 0
 "  let g:embrace_smsd_debug_level = 1
 "  let g:embrace_smsd_debug_level = 2
 
-function! g:embrace#trace#trace(msg)
+function! g:embrace#trace#trace(msg) abort
   if g:embrace_smsd_debug_level > 0
     echom a:msg
   endif
 endfunction
 
-function! g:embrace#trace#trace_level()
+function! g:embrace#trace#trace_level() abort
   return g:embrace_smsd_debug_level
 endfunction
 

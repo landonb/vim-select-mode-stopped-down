@@ -25,7 +25,7 @@ let g:loaded_vim_select_mode_stopped_down = 1
 
 " ========================================================================
 
-function! s:trace_current_column_position(mode, dir)
+function! s:trace_current_column_position(mode, dir) abort
   if g:embrace#trace#trace_level() <= 1 | return | endif
 
   let prefix = a:dir == 'fwd' ? 'fwd(1)' : 'rwd(-1)'
@@ -39,7 +39,7 @@ endfunction
 
 " ------------------------------------------------------------------------
 
-function! s:trace_selection_bounds(calln)
+function! s:trace_selection_bounds(calln) abort
   if g:embrace#trace#trace_level() <= 1 | return | endif
 
   let prefix = "selection/" . a:calln
@@ -229,7 +229,7 @@ endfunction
 "                      getpos("v"): [0, 3205, 3, 0]
 "                      getpos("'<"): [0, 3205, 3, 0]
 "                      getpos("'>"): [0, 3205, 13, 0]
-function! s:prepare_selection_session(dirn, mode)
+function! s:prepare_selection_session(dirn, mode) abort
   call s:trace_current_column_position(a:mode, a:dirn == -1 ? 'rwd' : 'fwd')
 
   call s:trace_selection_bounds("1")
@@ -336,7 +336,7 @@ endfunction
 
 " ========================================================================
 
-function! s:extend_selection_by_word_reverse(mode)
+function! s:extend_selection_by_word_reverse(mode) abort
   let last_pttrn = @/
   " Note that * does not need to be delimited, but \\+ does.
   let @/ = "\\(\\(\\_^\\|\\<\\|\\s\\+\\)\\zs\\|\\>\\)"
@@ -470,7 +470,7 @@ endfunction
 
 " ========================================================================
 
-function! s:extend_selection_by_word_forward(mode)
+function! s:extend_selection_by_word_forward(mode) abort
   let last_pttrn = @/
   " Sorta the opposite of the pattern in extend_selection_by_word_reverse.
   let @/ = "\\(\\_^\\zs\\|\\>\\|[\[:graph:]]\\zs[\[:blank:]]\\|\\n\\|[^\[:blank:]]\\<\\zs\\)"
@@ -603,7 +603,7 @@ endfunction
 
 " ***
 
-function! s:get_leftmost_nonblank_byte_col(ref_lnum, ref_coln)
+function! s:get_leftmost_nonblank_byte_col(ref_lnum, ref_coln) abort
   " Remember the current byte position.
   let l:waspos = getpos(".")
   " Jump to the assessed location.
@@ -622,7 +622,7 @@ endfunction
 
 " ***
 
-function! s:ensure_select_mode()
+function! s:ensure_select_mode() abort
   if mode() != 'v' | return | endif
 
   " Use v_CTRL-G to toggle between Visual mode and Select mode (to set
@@ -634,41 +634,41 @@ endfunction
 
 " ========================================================================
 
-function! s:free_keys_extend_selection_by_word_reverse()
+function! s:free_keys_extend_selection_by_word_reverse() abort
   silent! nunmap <C-S-Left>
   silent! iunmap <C-S-Left>
   silent! vunmap <C-S-Left>
 endfunction
 
-function! s:free_keys_extend_selection_by_word_forward()
+function! s:free_keys_extend_selection_by_word_forward() abort
   silent! nunmap <C-S-Right>
   silent! iunmap <C-S-Right>
   silent! vunmap <C-S-Right>
 endfunction
 
-function! s:free_keys_extend_selection_by_word()
+function! s:free_keys_extend_selection_by_word() abort
   call <SID>free_keys_extend_selection_by_word_reverse()
   call <SID>free_keys_extend_selection_by_word_forward()
 endfunction
 
-function! s:wire_keys_extend_selection_by_word_reverse()
+function! s:wire_keys_extend_selection_by_word_reverse() abort
   nnoremap <silent> <C-S-Left> :<C-U>call <SID>extend_selection_by_word_reverse('n')<CR>
   inoremap <silent> <C-S-Left> <C-O>:<C-U>call <SID>extend_selection_by_word_reverse('i')<CR>
   vnoremap <silent> <C-S-Left> :<C-U>call <SID>extend_selection_by_word_reverse('v')<CR>
 endfunction
 
-function! s:wire_keys_extend_selection_by_word_forward()
+function! s:wire_keys_extend_selection_by_word_forward() abort
   nnoremap <silent> <C-S-Right> :<C-U>call <SID>extend_selection_by_word_forward('n')<CR>
   inoremap <silent> <C-S-Right> <C-O>:<C-U>call <SID>extend_selection_by_word_forward('i')<CR>
   vnoremap <silent> <C-S-Right> :<C-U>call <SID>extend_selection_by_word_forward('v')<CR>
 endfunction
 
-function! s:wire_keys_extend_selection_by_word()
+function! s:wire_keys_extend_selection_by_word() abort
   call <SID>wire_keys_extend_selection_by_word_reverse()
   call <SID>wire_keys_extend_selection_by_word_forward()
 endfunction
 
-function! s:inject_maps_extend_selection_by_word()
+function! s:inject_maps_extend_selection_by_word() abort
   call <SID>free_keys_extend_selection_by_word()
   call <SID>wire_keys_extend_selection_by_word()
 endfunction
