@@ -1,6 +1,6 @@
 " Improved wordy select-mode behavior wire to ctrl-select-left/-right work.
-" Author: Landon Bouma (landonb &#x40; retrosoft &#x2E; com)
-" Online: https://github.com/landonb/vim-select-mode-stopped-down
+" Author: Landon Bouma <https://tallybark.com/>
+" Project: https://github.com/landonb/vim-select-mode-stopped-down#🛑
 " License: https://creativecommons.org/publicdomain/zero/1.0/
 
 " ========================================================================
