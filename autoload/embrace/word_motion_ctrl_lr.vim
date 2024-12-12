@@ -323,12 +323,10 @@ function! s:wire_keys_word_motions() abort
   call s:wire_keys_word_motions_rightward()
 endfunction
 
-function! s:inject_maps_word_motions() abort
+" -------------------------------------------------------------------
+
+function! g:embrace#word_motion_ctrl_lr#inject_maps_word_motions() abort
   call <SID>free_keys_word_motions()
   call <SID>wire_keys_word_motions()
 endfunction
-
-" -------------------------------------------------------------------
-
-call <SID>inject_maps_word_motions()
 

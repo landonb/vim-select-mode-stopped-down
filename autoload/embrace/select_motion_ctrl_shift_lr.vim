@@ -668,15 +668,10 @@ function! s:wire_keys_extend_selection_by_word() abort
   call <SID>wire_keys_extend_selection_by_word_forward()
 endfunction
 
-function! s:inject_maps_extend_selection_by_word() abort
+" -------------------------------------------------------------------
+
+function! g:embrace#select_motion_ctrl_shift_lr#inject_maps_extend_selection_by_word() abort
   call <SID>free_keys_extend_selection_by_word()
   call <SID>wire_keys_extend_selection_by_word()
 endfunction
-
-" -------------------------------------------------------------------
-
-if !exists("g:vim_select_mode_stopped_down_no_mappings")
-    \ || !g:vim_select_mode_stopped_down_no_mappings
-  call <SID>inject_maps_extend_selection_by_word()
-endif
 
