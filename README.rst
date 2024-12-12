@@ -108,11 +108,11 @@ and then map the key bindings from your own code, e.g.,::
 
   let g:vim_select_mode_stopped_down_no_mappings = 1
 
-  nnoremap <silent> <C-S-Left> :<C-U>call <SID>extend_selection_by_word_reverse('n')<CR>
-  inoremap <silent> <C-S-Left> <C-O>:<C-U>call <SID>extend_selection_by_word_reverse('i')<CR>
-  vnoremap <silent> <C-S-Left> :<C-U>call <SID>extend_selection_by_word_reverse('v')<CR>
+  nnoremap <silent> <C-S-Left> :<C-U>call g:embrace#alt_select_motion#extend_selection_by_word_reverse('n')<CR>
+  inoremap <silent> <C-S-Left> <C-O>:<C-U>call g:embrace#alt_select_motion#extend_selection_by_word_reverse('i')<CR>
+  vnoremap <silent> <C-S-Left> :<C-U>call g:embrace#alt_select_motion#extend_selection_by_word_reverse('v')<CR>
 
-  nnoremap <silent> <C-S-Right> :<C-U>call <SID>extend_selection_by_word_forward('n')<CR>
-  inoremap <silent> <C-S-Right> <C-O>:<C-U>call <SID>extend_selection_by_word_forward('i')<CR>
-  vnoremap <silent> <C-S-Right> :<C-U>call <SID>extend_selection_by_word_forward('v')<CR>
+  nnoremap <silent> <C-S-Right> :<C-U>call g:embrace#alt_select_motion#extend_selection_by_word_forward('n')<CR>
+  inoremap <silent> <C-S-Right> <C-O>:<C-U>call g:embrace#alt_select_motion#extend_selection_by_word_forward('i')<CR>
+  vnoremap <silent> <C-S-Right> :<C-U>call g:embrace#alt_select_motion#extend_selection_by_word_forward('v')<CR>
 

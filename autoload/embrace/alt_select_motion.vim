@@ -316,7 +316,7 @@ endfunction
 
 " -------------------------------------------------------------------
 
-function! s:extend_selection_by_word_reverse(mode) abort
+function! g:embrace#alt_select_motion#extend_selection_by_word_reverse(mode) abort
   let last_pttrn = @/
   " Note that * does not need to be delimited, but \\+ does.
   let @/ = "\\(\\(\\_^\\|\\<\\|\\s\\+\\)\\zs\\|\\>\\)"
@@ -450,7 +450,7 @@ endfunction
 
 " -------------------------------------------------------------------
 
-function! s:extend_selection_by_word_forward(mode) abort
+function! g:embrace#alt_select_motion#extend_selection_by_word_forward(mode) abort
   let last_pttrn = @/
   " Sorta the opposite of the pattern in extend_selection_by_word_reverse.
   let @/ = "\\(\\_^\\zs\\|\\>\\|[\[:graph:]]\\zs[\[:blank:]]\\|\\n\\|[^\[:blank:]]\\<\\zs\\)"
@@ -632,15 +632,15 @@ function! s:free_keys_extend_selection_by_word() abort
 endfunction
 
 function! s:wire_keys_extend_selection_by_word_reverse() abort
-  nnoremap <silent> <C-S-Left> :<C-U>call <SID>extend_selection_by_word_reverse('n')<CR>
-  inoremap <silent> <C-S-Left> <C-O>:<C-U>call <SID>extend_selection_by_word_reverse('i')<CR>
-  vnoremap <silent> <C-S-Left> :<C-U>call <SID>extend_selection_by_word_reverse('v')<CR>
+  nnoremap <silent> <C-S-Left> :<C-U>call g:embrace#alt_select_motion#extend_selection_by_word_reverse('n')<CR>
+  inoremap <silent> <C-S-Left> <C-O>:<C-U>call g:embrace#alt_select_motion#extend_selection_by_word_reverse('i')<CR>
+  vnoremap <silent> <C-S-Left> :<C-U>call g:embrace#alt_select_motion#extend_selection_by_word_reverse('v')<CR>
 endfunction
 
 function! s:wire_keys_extend_selection_by_word_forward() abort
-  nnoremap <silent> <C-S-Right> :<C-U>call <SID>extend_selection_by_word_forward('n')<CR>
-  inoremap <silent> <C-S-Right> <C-O>:<C-U>call <SID>extend_selection_by_word_forward('i')<CR>
-  vnoremap <silent> <C-S-Right> :<C-U>call <SID>extend_selection_by_word_forward('v')<CR>
+  nnoremap <silent> <C-S-Right> :<C-U>call g:embrace#alt_select_motion#extend_selection_by_word_forward('n')<CR>
+  inoremap <silent> <C-S-Right> <C-O>:<C-U>call g:embrace#alt_select_motion#extend_selection_by_word_forward('i')<CR>
+  vnoremap <silent> <C-S-Right> :<C-U>call g:embrace#alt_select_motion#extend_selection_by_word_forward('v')<CR>
 endfunction
 
 function! s:wire_keys_extend_selection_by_word() abort
@@ -650,7 +650,7 @@ endfunction
 
 " -------------------------------------------------------------------
 
-function! g:embrace#select_motion_ctrl_shift_lr#inject_maps_extend_selection_by_word() abort
+function! g:embrace#alt_select_motion#inject_maps_extend_selection_by_word() abort
   call <SID>free_keys_extend_selection_by_word()
   call <SID>wire_keys_extend_selection_by_word()
 endfunction
