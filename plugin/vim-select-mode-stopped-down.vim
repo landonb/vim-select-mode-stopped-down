@@ -7,11 +7,11 @@
 " GUARD: Press <F9> to reload this plugin (or :source it).
 " - Via: https://github.com/embrace-vim/vim-source-reloader#↩️
 
-if expand("%:p") ==# expand("<sfile>:p")
-  unlet g:loaded_vim_select_mode_stopped_down_plugin
+if expand('%:p') ==# expand('<sfile>:p')
+  unlet! g:loaded_vim_select_mode_stopped_down_plugin
 endif
 
-if exists("g:loaded_vim_select_mode_stopped_down_plugin") || &cp
+if exists('g:loaded_vim_select_mode_stopped_down_plugin') || &cp
 
   finish
 endif
