@@ -251,22 +251,6 @@ endfunction
 
 " -------------------------------------------------------------------
 
-function! s:free_keys_word_motions_leftward() abort
-  nunmap <C-Left>
-  iunmap <C-Left>
-endfunction
-
-function! s:free_keys_word_motions_rightward() abort
-  nunmap <C-Right>
-  iunmap <C-Right>
-endfunction
-
-function! s:free_keys_word_motions() abort
-  " Clear any existing mappings (makes this file reentrant).
-  call s:free_keys_word_motions_leftward()
-  call s:free_keys_word_motions_rightward()
-endfunction
-
 function! s:wire_keys_word_motions_leftward() abort
   " MAYBE/2020-05-12: Make C-Left more like C-Right.
   " - Some quirks with using builtin `b`:
@@ -298,15 +282,10 @@ function! s:wire_keys_word_motions_rightward() abort
   "   vnoremap <C-Right> e
 endfunction
 
-function! s:wire_keys_word_motions() abort
-  call s:wire_keys_word_motions_leftward()
-  call s:wire_keys_word_motions_rightward()
-endfunction
-
 " -------------------------------------------------------------------
 
 function! g:embrace#alt_word_motion#inject_maps_word_motions() abort
-  call <SID>free_keys_word_motions()
-  call <SID>wire_keys_word_motions()
+  call s:wire_keys_word_motions_leftward()
+  call s:wire_keys_word_motions_rightward()
 endfunction
 
