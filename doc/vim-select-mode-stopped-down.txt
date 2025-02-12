@@ -7,7 +7,7 @@ License: CC0 1.0 Public Domain (see `:e LICENSE`)
 ===========================================================================
 CONTENTS                             *vim-select-mode-stopped-down-contents*
 
-Documentation Index ~
+Vim-Select-Mode-Stopped-Down 🛑 ~
 
 1. Introduction                      |vim-select-mode-stopped-down-introduction|
 2. Key Commands                      |vim-select-mode-stopped-down-key-commands|
