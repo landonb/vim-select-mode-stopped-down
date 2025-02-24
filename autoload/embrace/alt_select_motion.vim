@@ -276,7 +276,12 @@ function! s:prepare_selection_session(dirn, mode) abort
   "   prev_coln so far unused (and probably won't be).
 
   if l:virt_coln > 1
-    let l:prev_bytes = strgetchar(l:ref_line, l:virt_coln - 1)
+    " Note that l:virt_coln is +1 the line length if the cursor is in the
+    " final column (we added 1 above). Use min() to account for this case:
+    " for all positions except the last, sub 1; but for cursor in the final
+    " column, sub 2.
+    let l:prev_posit = min([l:virt_coln - 1, len(l:ref_line) - 1])
+    let l:prev_bytes = strgetchar(l:ref_line, l:prev_posit)
     let prev_char = nr2char(l:prev_bytes)
     let l:prevchlen = len(l:prev_char)
     if g:embrace#trace#trace_level() > 1
