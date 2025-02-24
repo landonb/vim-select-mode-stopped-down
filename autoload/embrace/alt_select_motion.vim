@@ -225,24 +225,24 @@ function! s:prepare_selection_session(dirn, mode) abort
 
   let [l:i_bufn, l:i_lnum, l:i_coln, l:i_voff, l:i_want] = range(0, 4)
 
-  let end_pos = getpos(".")
-  let ref_lnum = l:end_pos[l:i_lnum]
-  let ref_coln = l:end_pos[l:i_coln]
+  let l:end_pos = getpos(".")
+  let l:ref_lnum = l:end_pos[l:i_lnum]
+  let l:ref_coln = l:end_pos[l:i_coln]
 
-  let virt_coln = virtcol(".")
+  let l:virt_coln = virtcol(".")
 
-  let ref_line = getline(l:ref_lnum)
-  let line_nbytes = len(l:ref_line)
-  let line_nchars = strchars(l:ref_line)
+  let l:ref_line = getline(l:ref_lnum)
+  let l:line_nbytes = len(l:ref_line)
+  let l:line_nchars = strchars(l:ref_line)
 
   if a:mode == 'i' && l:virt_coln == l:line_nchars
     " Edge case: in Insert mode, if cursor if in penultimate position,
     " or if it's at the final ($) position, the getpos(".")/virtcol(".")
     " positions are the same -- but curswant reveals the true position.
-    let cur_pos = getcurpos()
+    let l:cur_pos = getcurpos()
     " Get the curswant value, i.e., getcurpos()[4].
     if l:cur_pos[l:i_want] > l:virt_coln
-      let virt_coln += 1
+      let l:virt_coln += 1
     endif
   endif
 
@@ -252,10 +252,10 @@ function! s:prepare_selection_session(dirn, mode) abort
   " to check if cursor at the penultimate line position.
   if l:ref_coln < len(l:ref_line)
     " ref_coln is 1-based, so this extracts substring starting at character after ref_coln.
-    let snippet = strpart(l:ref_line, l:ref_coln)
-    let next_bytes = strgetchar(l:snippet, 0)
-    let next_char = nr2char(l:next_bytes)
-    let nextchlen = len(l:next_char)
+    let l:snippet = strpart(l:ref_line, l:ref_coln)
+    let l:next_bytes = strgetchar(l:snippet, 0)
+    let l:next_char = nr2char(l:next_bytes)
+    let l:nextchlen = len(l:next_char)
     if g:embrace#trace#trace_level() > 1
       call g:embrace#trace#trace("- next_coln:"
         \ . " snippet: " . l:snippet
@@ -265,9 +265,9 @@ function! s:prepare_selection_session(dirn, mode) abort
       \)
     endif
   else
-    let nextchlen = 0
+    let l:nextchlen = 0
   endif
-  let next_coln = l:ref_coln + l:nextchlen
+  let l:next_coln = l:ref_coln + l:nextchlen
 
   " ***
 
@@ -276,9 +276,9 @@ function! s:prepare_selection_session(dirn, mode) abort
   "   prev_coln so far unused (and probably won't be).
 
   if l:virt_coln > 1
-    let prev_bytes = strgetchar(l:ref_line, l:virt_coln - 1)
+    let l:prev_bytes = strgetchar(l:ref_line, l:virt_coln - 1)
     let prev_char = nr2char(l:prev_bytes)
-    let prevchlen = len(l:prev_char)
+    let l:prevchlen = len(l:prev_char)
     if g:embrace#trace#trace_level() > 1
       call g:embrace#trace#trace("- prev_coln:"
         \ . " prev_bytes: " . l:prev_bytes
@@ -287,9 +287,9 @@ function! s:prepare_selection_session(dirn, mode) abort
       \)
     endif
   else
-    let prevchlen = 0
+    let l:prevchlen = 0
   endif
-  let prev_coln = l:ref_coln - l:prevchlen
+  let l:prev_coln = l:ref_coln - l:prevchlen
 
   " ***
 
