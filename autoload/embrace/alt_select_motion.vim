@@ -216,7 +216,7 @@ function! s:prepare_selection_session(dirn, mode) abort
 
   if a:mode == 'v'
     " Already in 'v'isual select mode.
-    " HACK: Make sure virtcol(v) and virtcol(.) are updated:
+    " SAVVY: Make sure virtcol(v) and virtcol(.) are updated:
     "   Call `gv`, lest virtcol(v) == virtcol(.) == virtcol('<).
     silent! normal! gv
     call s:trace_selection_bounds("2")
@@ -251,7 +251,8 @@ function! s:prepare_selection_session(dirn, mode) abort
   " calculate the byte column position of the following character,
   " to check if cursor at the penultimate line position.
   if l:ref_coln < len(l:ref_line)
-    " ref_coln is 1-based, so this extracts substring starting at character after ref_coln.
+    " ref_coln is 1-based, so this extracts substring starting at
+    " character after ref_coln.
     let l:snippet = strpart(l:ref_line, l:ref_coln)
     let l:next_bytes = strgetchar(l:snippet, 0)
     let l:next_char = nr2char(l:next_bytes)
