@@ -323,6 +323,9 @@ endfunction
 " -------------------------------------------------------------------
 
 function! g:embrace#alt_select_motion#extend_selection_by_word_reverse(mode) abort
+  " Inhibit |searchcount| messages, which Noice displays as virtual text.
+  let l:restore_shm = &shortmess
+  set shortmess+=S
   let last_pttrn = @/
   " Note that * does not need to be delimited, but \\+ does.
   let @/ = "\\(\\(\\_^\\|\\<\\|\\s\\+\\)\\zs\\|\\>\\)"
@@ -452,11 +455,22 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_reverse(mode) abo
   call s:ensure_select_mode()
 
   let @/ = l:last_pttrn
+  let &shortmess = l:restore_shm
+  " Note that :nohlsearch does not seem necessary here.
+  " - DUNNO: In Neovim Lua config, however, I've got similar code (that
+  "   sets/restores @/), and there it does have to call :nohlsearch,
+  "   otherwise the @/ search matches are highlighted (See nvim-lazyb
+  "   delete-forward.lua and delete-backward.lua).
+  "   - So it seems odd that |:nohlsearch| not necessary here. If user has
+  "     hlsearch enabled, matches should be highlighted whenever @/ is set.
 endfunction
 
 " -------------------------------------------------------------------
 
 function! g:embrace#alt_select_motion#extend_selection_by_word_forward(mode) abort
+  " Inhibit |searchcount| messages, which Noice displays as virtual text.
+  let l:restore_shm = &shortmess
+  set shortmess+=S
   let last_pttrn = @/
   " Sorta the opposite of the pattern in extend_selection_by_word_reverse.
   let @/ = "\\(\\_^\\zs\\|\\>\\|[\[:graph:]]\\zs[\[:blank:]]\\|\\n\\|[^\[:blank:]]\\<\\zs\\)"
@@ -579,6 +593,7 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_forward(mode) abo
     \)
 
   let @/ = l:last_pttrn
+  let &shortmess = l:restore_shm
 
   " 2021-02-01: Not sure why, nor not sure why `silent!` prefixes are
   " not doing the trick, but it seems (by way of process of narrowing
