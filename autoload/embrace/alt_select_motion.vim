@@ -390,6 +390,7 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_reverse(mode) abo
       " Note that strlen() returns byte count, and strchars() returns char count,
       " i.e., to help handle multi-byte characters.
       let l:ref_nchars = strchars(ref_text)
+      " REFER: strgetchar() uses 0-based character index, not a byte index.
       let char_penult = nr2char(strgetchar(ref_text, l:ref_nchars - 2))
       let char_ending = nr2char(strgetchar(ref_text, l:ref_nchars - 1))
       let isk_penult = l:char_penult =~ "\\k"
