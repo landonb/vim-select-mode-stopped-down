@@ -399,14 +399,14 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_reverse(mode) abo
       let l:ref_nchars = strchars(ref_text)
       " REFER: strgetchar() uses 0-based character index, not a byte index.
       let l:char_penult = nr2char(strgetchar(ref_text, l:ref_nchars - 2))
-      let char_ending = nr2char(strgetchar(ref_text, l:ref_nchars - 1))
+      let l:char_ending = nr2char(strgetchar(ref_text, l:ref_nchars - 1))
       let isk_penult = l:char_penult =~ "\\k"
       let isk_ending = l:char_ending =~ "\\k"
       let iss_penult = l:char_penult =~ "\\s"
       let iss_ending = l:char_ending =~ "\\s"
       " Prepare a helpful trace message.
       let trace_isk = "char_penult: " . l:char_penult . " (" . l:isk_penult . ")"
-        \ . " / char_ending: " . char_ending . " (" . l:isk_ending . ")"
+        \ . " / char_ending: " . l:char_ending . " (" . l:isk_ending . ")"
       " Test if the last two characters are in separate classes.
       if a:mode == 'i' && l:virt_coln == l:line_ncols
         " A `gN` from the penultimate column in insert mode includes final character,
