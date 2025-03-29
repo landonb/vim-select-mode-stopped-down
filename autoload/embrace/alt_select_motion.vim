@@ -445,6 +445,7 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_forward(mode) abo
   " Sorta the opposite of the pattern in extend_selection_by_word_reverse.
   let @/ = "\\(\\_^\\zs\\|\\>\\|[\[:graph:]]\\zs[\[:blank:]]\\|\\n\\|[^\[:blank:]]\\<\\zs\\)"
 
+  " Unused: ref_coln, virt_coln
   let [
     \ ref_lnum,
     \ ref_coln,
@@ -575,13 +576,16 @@ endfunction
 
 function! s:get_leftmost_nonblank_byte_col(ref_lnum, ref_coln) abort
   " Remember the current byte position.
+  " - CALSO: |getcurpos()|
   let l:waspos = getpos(".")
   " Jump to the assessed location.
   call setpos('.', [0, a:ref_lnum, a:ref_coln, 0])
   " Identify the leftmost column with a non-blank character.
-  " - You can use ^ or _ to go to first character in line, but note that the
-  "   dubs_buffer_fun plugin maps `__`, so if we used a single `_`, the
-  "   command would be delayed.
+  " - SAVVY: Use ^ or _ to go to the first character in the line.
+  "   ^ To the first non-blank character of the line.
+  "       |exclusive| motion.  Any count is ignored.
+  "   _ <underscore>  [count] - 1 lines downward, on the first
+  "       non-blank character |linewise|.
   normal! ^
   let ref_visi = col(".")
   "  call g:embrace#trace#trace("ref_visi: " . l:ref_visi)
