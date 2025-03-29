@@ -272,33 +272,6 @@ function! s:prepare_selection_session(dirn, mode) abort
 
   " ***
 
-  " FIXME/2020-05-13 16:19: We may not need prev_coln.
-  " - I addd this block for parity with next_coln, but
-  "   prev_coln so far unused (and probably won't be).
-
-  if l:virt_coln > 1
-    " Note that l:virt_coln is +1 the line length if the cursor is in the
-    " final column (we added 1 above). Use min() to account for this case:
-    " for all positions except the last, sub 1; but for cursor in the final
-    " column, sub 2.
-    let l:prev_posit = min([l:virt_coln - 1, len(l:ref_line) - 1])
-    let l:prev_bytes = strgetchar(l:ref_line, l:prev_posit)
-    let prev_char = nr2char(l:prev_bytes)
-    let l:prevchlen = len(l:prev_char)
-    if g:embrace#trace#trace_level() > 1
-      call g:embrace#trace#trace("- prev_coln:"
-        \ . " prev_bytes: " . l:prev_bytes
-        \ . " / prev_char: " . l:prev_char
-        \ . " / prevchlen: " . l:prevchlen
-      \)
-    endif
-  else
-    let l:prevchlen = 0
-  endif
-  let l:prev_coln = l:ref_coln - l:prevchlen
-
-  " ***
-
   let trace_vars = "dir(" . a:dirn . "):"
     \ . " ref_lnum: " . l:ref_lnum
     \ . " / ref_coln: " . l:ref_coln
@@ -306,7 +279,6 @@ function! s:prepare_selection_session(dirn, mode) abort
     \ . " / line_nchars: " . l:line_nchars
     \ . " / virt_coln: " . l:virt_coln
     \ . " / next_coln: " . l:next_coln
-    \ . " / prev_coln: " . l:prev_coln
 
   return [
     \ l:ref_lnum,
@@ -315,7 +287,6 @@ function! s:prepare_selection_session(dirn, mode) abort
     \ l:line_nchars,
     \ l:virt_coln,
     \ l:next_coln,
-    \ l:prev_coln,
     \ l:trace_vars,
     \]
 endfunction
@@ -337,7 +308,6 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_reverse(mode) abo
     \ line_nchars,
     \ virt_coln,
     \ next_coln,
-    \ prev_coln,
     \ trace_vars
     \] = s:prepare_selection_session(-1, a:mode)
 
@@ -482,7 +452,6 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_forward(mode) abo
     \ line_nchars,
     \ virt_coln,
     \ next_coln,
-    \ prev_coln,
     \ trace_vars
     \] = s:prepare_selection_session(1, a:mode)
 
