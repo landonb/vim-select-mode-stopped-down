@@ -233,9 +233,9 @@ function! s:prepare_selection_session(dirn, mode) abort
 
   let l:ref_line = getline(l:ref_lnum)
   let l:line_nbytes = len(l:ref_line)
-  let l:line_nchars = strdisplaywidth(l:ref_line)
+  let l:line_ncols = strdisplaywidth(l:ref_line)
 
-  if a:mode == 'i' && l:virt_coln == l:line_nchars
+  if a:mode == 'i' && l:virt_coln == l:line_ncols
     " Edge case: in Insert mode, if cursor if in penultimate position,
     " or if it's at the final ($) position, the getpos(".")/virtcol(".")
     " positions are the same -- but curswant reveals the true position.
@@ -276,7 +276,7 @@ function! s:prepare_selection_session(dirn, mode) abort
     \ . " ref_lnum: " . l:ref_lnum
     \ . " / ref_coln: " . l:ref_coln
     \ . " / line_nbytes: " . l:line_nbytes
-    \ . " / line_nchars: " . l:line_nchars
+    \ . " / line_ncols: " . l:line_ncols
     \ . " / virt_coln: " . l:virt_coln
     \ . " / next_coln: " . l:next_coln
 
@@ -284,7 +284,7 @@ function! s:prepare_selection_session(dirn, mode) abort
     \ l:ref_lnum,
     \ l:ref_coln,
     \ l:line_nbytes,
-    \ l:line_nchars,
+    \ l:line_ncols,
     \ l:virt_coln,
     \ l:next_coln,
     \ l:trace_vars,
@@ -305,7 +305,7 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_reverse(mode) abo
     \ ref_lnum,
     \ ref_coln,
     \ line_nbytes,
-    \ line_nchars,
+    \ line_ncols,
     \ virt_coln,
     \ next_coln,
     \ trace_vars
@@ -351,7 +351,7 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_reverse(mode) abo
       " See also, set above: let @/ = "\\n", such that slow-walks across newlines.
       let nrmlc = 'vgN'
       call g:embrace#trace#trace("RWD: first col: insert mode: " . l:trace_vars)
-    elseif l:virt_coln == 2 && l:line_nchars > 2
+    elseif l:virt_coln == 2 && l:line_ncols > 2
       " Because switched to normal mode, moving cursor left, to first column,
       " and then a `vgN` for some reason selects first two columns' characters,
       " rather than just first character/column.
@@ -363,12 +363,12 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_reverse(mode) abo
     "   from insert mode when cursor is at final position...
     " NOPE: elseif col(".") < col("$") - 1
     " SAME: elseif l:ref_coln < col("$") - 1
-    " SORTS: elseif l:virt_coln < l:line_nchars
-    " but really need to check mode, because virt_coln is line_nchars + 1 in
+    " SORTS: elseif l:virt_coln < l:line_ncols
+    " but really need to check mode, because virt_coln is line_ncols + 1 in
     " insert mode when cursor is past the final character.
     elseif 0
-      \ || (a:mode == 'i' && l:virt_coln <= l:line_nchars)
-      \ || (a:mode == 'n' && l:virt_coln < l:line_nchars)
+      \ || (a:mode == 'i' && l:virt_coln <= l:line_ncols)
+      \ || (a:mode == 'n' && l:virt_coln < l:line_ncols)
       " Not on last column of the line, so may need to move cursor left one,
       " otherwise character under normal cursor (after character user expects
       " to be selected last) will get selected, too.
@@ -401,9 +401,9 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_reverse(mode) abo
       let trace_isk = "char_penult: " . char_penult . " (" . l:isk_penult . ")"
         \ . " / char_ending: " . char_ending . " (" . l:isk_ending . ")"
       " Test if the last two characters are in separate classes.
-      if a:mode == 'i' && l:virt_coln == l:line_nchars
+      if a:mode == 'i' && l:virt_coln == l:line_ncols
         " A `gN` from the penultimate column in insert mode includes final character,
-        " so move left first. (Note that virt_coln is line_nchars + 1 in $ position.
+        " so move left first. (Note that virt_coln is line_ncols + 1 in $ position.
         execute "normal! h"
       endif
       " Handle whitespace specially because it's part of @/, and it lines ends
@@ -451,7 +451,7 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_forward(mode) abo
     \ ref_lnum,
     \ ref_coln,
     \ line_nbytes,
-    \ line_nchars,
+    \ line_ncols,
     \ virt_coln,
     \ next_coln,
     \ trace_vars
@@ -470,7 +470,7 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_forward(mode) abo
     " keyword character.
     " - Unless line is empty, in which case select newline until
     "   next start-of-word boundary, or space, or newline.
-    if l:line_nchars > 0
+    if l:line_ncols > 0
       let @/ = "\\(\\>\\|[\[:space:]]\\)"
     else
       let @/ = "\\(\\<\\|[\[:space:]]\\|\\n\\)"
