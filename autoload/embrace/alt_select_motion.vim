@@ -233,7 +233,7 @@ function! s:prepare_selection_session(dirn, mode) abort
 
   let l:ref_line = getline(l:ref_lnum)
   let l:line_nbytes = len(l:ref_line)
-  let l:line_nchars = strchars(l:ref_line)
+  let l:line_nchars = strdisplaywidth(l:ref_line)
 
   if a:mode == 'i' && l:virt_coln == l:line_nchars
     " Edge case: in Insert mode, if cursor if in penultimate position,
