@@ -400,10 +400,10 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_reverse(mode) abo
       " REFER: strgetchar() uses 0-based character index, not a byte index.
       let l:char_penult = nr2char(strgetchar(ref_text, l:ref_nchars - 2))
       let l:char_ending = nr2char(strgetchar(ref_text, l:ref_nchars - 1))
-      let isk_penult = l:char_penult =~ "\\k"
-      let isk_ending = l:char_ending =~ "\\k"
-      let iss_penult = l:char_penult =~ "\\s"
-      let iss_ending = l:char_ending =~ "\\s"
+      let l:isk_penult = l:char_penult =~ "\\k"
+      let l:isk_ending = l:char_ending =~ "\\k"
+      let l:iss_penult = l:char_penult =~ "\\s"
+      let l:iss_ending = l:char_ending =~ "\\s"
       " Prepare a helpful trace message.
       let trace_isk = "char_penult: " . l:char_penult . " (" . l:isk_penult . ")"
         \ . " / char_ending: " . l:char_ending . " (" . l:isk_ending . ")"
