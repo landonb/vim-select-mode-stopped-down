@@ -223,7 +223,7 @@ function! s:prepare_selection_session(dirn, mode) abort
   " else, a:mode =~ '[in]', and getpos(".") will be accurate.
   endif
 
-  let [l:i_bufn, l:i_lnum, l:i_coln, l:i_voff, l:i_want] = range(0, 4)
+  let [l:i_bufn, l:i_lnum, l:i_coln, l:i_voff, l:i_curswant] = range(0, 4)
 
   let l:end_pos = getpos(".")
   let l:ref_lnum = l:end_pos[l:i_lnum]
@@ -248,7 +248,7 @@ function! s:prepare_selection_session(dirn, mode) abort
     " positions are the same -- but curswant reveals the true position.
     let l:cur_pos = getcurpos()
     " Get the curswant value, i.e., getcurpos()[4].
-    if l:cur_pos[l:i_want] > l:virt_coln
+    if l:cur_pos[l:i_curswant] > l:virt_coln
       let l:virt_coln += 1
     endif
   endif
