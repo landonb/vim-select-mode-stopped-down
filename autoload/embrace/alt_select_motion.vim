@@ -386,12 +386,12 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_reverse(mode) abo
       "              ^
       " because neither ' ' nor '.' match iskeyword (\k, or [:keyword:]),
       " but Vim considers whitespace boundaries when choosing words.
-      let line_text = getline(l:ref_lnum)
+      let ref_text = getline(l:ref_lnum)
       " Note that strlen() returns byte count, and strchars() returns char count,
       " i.e., to help handle multi-byte characters.
-      let line_nchars = strchars(line_text)
-      let char_penult = nr2char(strgetchar(line_text, line_nchars - 2))
-      let char_ending = nr2char(strgetchar(line_text, line_nchars - 1))
+      let line_nchars = strchars(ref_text)
+      let char_penult = nr2char(strgetchar(ref_text, line_nchars - 2))
+      let char_ending = nr2char(strgetchar(ref_text, line_nchars - 1))
       let isk_penult = l:char_penult =~ "\\k"
       let isk_ending = l:char_ending =~ "\\k"
       let iss_penult = l:char_penult =~ "\\s"
