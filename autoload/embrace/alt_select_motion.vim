@@ -233,6 +233,13 @@ function! s:prepare_selection_session(dirn, mode) abort
 
   let l:ref_line = getline(l:ref_lnum)
   let l:line_nbytes = len(l:ref_line)
+  " SAVVY: Comparing string length functions:
+  "   1 strcharlen("🇨🇦"),
+  "   2 strdisplaywidth("🇨🇦"),
+  "   2 strwidth("🇨🇦").
+  "   8 len("🇨🇦")
+  "   8 strlen("🇨🇦")
+  " REFER: strdisplaywidth similar to strwidth, except latter considers Tab as 1 char.
   let l:line_ncols = strdisplaywidth(l:ref_line)
 
   if a:mode == 'i' && l:virt_coln == l:line_ncols
