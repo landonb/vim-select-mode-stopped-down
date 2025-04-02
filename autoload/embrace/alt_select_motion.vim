@@ -474,22 +474,6 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_forward(mode) abo
   " character. This is the byte column of the first visible character.
   let ref_visi = s:get_leftmost_nonblank_byte_col(l:ref_lnum, l:ref_coln)
 
-  if l:ref_coln < l:ref_visi
-    " Select whitespace from cursor to before start of first word.
-    let @/ = "\\_^[\[:blank:]]\\+\\zs"
-  elseif l:ref_coln == l:ref_visi
-    " Select words characters from cursor to end of first word,
-    " |or to next space in case what's under character is solo
-    " keyword character.
-    " - Unless line is empty, in which case select newline until
-    "   next start-of-word boundary, or space, or newline.
-    if l:line_ncols > 0
-      let @/ = "\\(\\>\\|[\[:space:]]\\)"
-    else
-      let @/ = "\\(\\<\\|[\[:space:]]\\|\\n\\)"
-    endif
-  endif
-
   let trace_prefix = ""
   if l:next_coln == l:line_nbytes && (!(a:mode == 'i' && l:virt_coln == l:line_nbytes + 1))
     " In insert mode before final line char; or normal mode atop final char.
@@ -520,56 +504,74 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_forward(mode) abo
       normal! gn
       let trace_prefix = "eol/!visual"
     endif
-  elseif a:mode == 'v'
-    " Start visual mode with same area as before (`gv`),
-    " and select forward using MRU search pattern (`n`).
-    " - Unless on the final line, in which case `gvn` selects
-    "   all the way back up to the top of the file...
-    "   - But rather than check if on last line, e.g.,
-    "       let was_on_last = line('.') == line('$')
-    "     we can just set nowrapscan for the time being.
-    let was_wrapscan = &wrapscan
-    set nowrapscan
-    " Strange: It's difficult to get rid of the nowrapscan message:
-    "   E385: search hit BOTTOM without match for: \(\>\|[[:space:]]\)
-    " - When I tried silent, e.g.,
-    "     silent! normal! gvn
-    "     silent! execute "normal! gvn"
-    "   I see an ugly error message:
-    "     Error detected while processing function
-    "       <SNR>100_extend_selection_by_word_forward[12]
-    "       ..<SNR>100_extend_selection_by_word_forward_select:
-    "       line   38:
-    "       E385: search hit BOTTOM without match for: \(\>\|[[:space:]]\)
-    " - So don't use silent. And shouldn't matter execute or not, e.g.,
-    "     normal! gvn
-    "     execute "normal! gvn"
-    " - Nonetheless, this still generates a message:
-    "     /\(\>\|[[:space:]]\)
-    try
-      " We called `gv` in prepare_selection_session.
-      " (Though calling again would not do any harm.)
-      "      normal! gvn
-      normal! n
-    " We could catch all errors:
-    "   catch /.*/
-    " but safer to be specific:
-    catch /^Vim\%((\a\+)\)\=:E385/
-      " pass
-    endtry
-    if l:was_wrapscan | set wrapscan | endif
-    let trace_prefix = "not final/visual"
   else
-    if l:next_coln == l:line_nbytes
-      " Tortoise across line breaks.
-      let @/ = "\\_$\\zs"
-      normal! gn
-      let trace_prefix = "not final/!visual/tortoise"
+    if l:ref_coln < l:ref_visi
+      " Select whitespace from cursor to before start of first word.
+      let @/ = "\\_^[\[:blank:]]\\+\\zs"
+    elseif l:ref_coln == l:ref_visi
+      " Select words characters from cursor to end of first word,
+      " |or to next space in case what's under character is solo
+      " keyword character.
+      " - Unless line is empty, in which case select newline until
+      "   next start-of-word boundary, or space, or newline.
+      if l:line_ncols > 0
+        let @/ = "\\(\\>\\|[\[:space:]]\\)"
+      else
+        let @/ = "\\(\\<\\|[\[:space:]]\\|\\n\\)"
+      endif
+    endif
+
+    if a:mode == 'v'
+      " Start visual mode with same area as before (`gv`),
+      " and select forward using MRU search pattern (`n`).
+      " - Unless on the final line, in which case `gvn` selects
+      "   all the way back up to the top of the file...
+      "   - But rather than check if on last line, e.g.,
+      "       let was_on_last = line('.') == line('$')
+      "     we can just set nowrapscan for the time being.
+      let was_wrapscan = &wrapscan
+      set nowrapscan
+      " Strange: It's difficult to get rid of the nowrapscan message:
+      "   E385: search hit BOTTOM without match for: \(\>\|[[:space:]]\)
+      " - When I tried silent, e.g.,
+      "     silent! normal! gvn
+      "     silent! execute "normal! gvn"
+      "   I see an ugly error message:
+      "     Error detected while processing function
+      "       <SNR>100_extend_selection_by_word_forward[12]
+      "       ..<SNR>100_extend_selection_by_word_forward_select:
+      "       line   38:
+      "       E385: search hit BOTTOM without match for: \(\>\|[[:space:]]\)
+      " - So don't use silent. And shouldn't matter execute or not, e.g.,
+      "     normal! gvn
+      "     execute "normal! gvn"
+      " - Nonetheless, this still generates a message:
+      "     /\(\>\|[[:space:]]\)
+      try
+        " We called `gv` in prepare_selection_session.
+        " (Though calling again would not do any harm.)
+        "      normal! gvn
+        normal! n
+      " We could catch all errors:
+      "   catch /.*/
+      " but safer to be specific:
+      catch /^Vim\%((\a\+)\)\=:E385/
+        " pass
+      endtry
+      if l:was_wrapscan | set wrapscan | endif
+      let trace_prefix = "not final/visual"
     else
-      let nrmlc = 'vn'
-      " Use silent so message doesn't show @/ while user adjusts selection.
-      execute "silent! normal! " . l:nrmlc
-      let trace_prefix = "not final/!visual/!tortoise"
+      if l:next_coln == l:line_nbytes
+        " Tortoise across line breaks.
+        let @/ = "\\_$\\zs"
+        normal! gn
+        let trace_prefix = "not final/!visual/tortoise"
+      else
+        let nrmlc = 'vn'
+        " Use silent so message doesn't show @/ while user adjusts selection.
+        execute "silent! normal! " . l:nrmlc
+        let trace_prefix = "not final/!visual/!tortoise"
+      endif
     endif
   endif
 
