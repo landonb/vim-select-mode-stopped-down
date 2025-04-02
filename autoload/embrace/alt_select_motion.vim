@@ -503,12 +503,11 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_forward(mode) abo
   elseif l:ref_coln == l:line_nbytes
     " Already selected to last line, or in Insert mode and at EOL,
     " select across newline to start of next line.
+    let @/ = "\\_$\\zs"
     if a:mode == 'v'
-      let @/ = "\\_$\\zs"
       normal! gvn
       let trace_prefix = "final col/tortoise/visual"
     else
-      let @/ = "\\_$\\zs"
       normal! gn
       let trace_prefix = "final col/tortoise/!visual"
     endif
