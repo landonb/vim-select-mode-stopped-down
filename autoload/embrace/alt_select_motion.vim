@@ -455,6 +455,9 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_forward(mode) abo
   let last_pttrn = @/
   " Sorta the opposite of the pattern in extend_selection_by_word_reverse.
   let @/ = "\\(\\_^\\zs\\|\\>\\|[\[:graph:]]\\zs[\[:blank:]]\\|\\n\\|[^\[:blank:]]\\<\\zs\\)"
+  " This plugin historically assumed "exclusive" &selection, but why not
+  " support both modes. (Also vim.snippet)
+  let inclusive = &selection == 'inclusive' ? 1 : 0
 
   " Unused: ref_coln, virt_coln
   let [
@@ -502,7 +505,10 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_forward(mode) abo
       normal! vg$
       let trace_prefix = "last col/!visual"
     endif
-
+    if inclusive
+      normal! h
+    endif
+ 
   elseif l:ref_coln == l:line_nbytes
     " Already selected to last line, or in Insert mode and at EOL,
     " select across newline to start of next line.
