@@ -5,6 +5,9 @@
 
 " -------------------------------------------------------------------
 
+" USAGE: DEVEL: Enable trace via:
+"   let g:embrace_smsd_debug_level = 1
+
 function! s:trace_current_column_position(mode, dir) abort
   if g:embrace#trace#trace_level() <= 1 | return | endif
 
