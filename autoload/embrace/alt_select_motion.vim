@@ -506,10 +506,10 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_forward(mode) abo
     let @/ = "\\_$\\zs"
     if a:mode == 'v'
       normal! gvn
-      let trace_prefix = "final col/tortoise/visual"
+      let trace_prefix = "eol/visual"
     else
       normal! gn
-      let trace_prefix = "final col/tortoise/!visual"
+      let trace_prefix = "eol/!visual"
     endif
   elseif a:mode == 'v'
     " Start visual mode with same area as before (`gv`),
