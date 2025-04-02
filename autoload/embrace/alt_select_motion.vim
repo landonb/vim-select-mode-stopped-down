@@ -485,7 +485,7 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_forward(mode) abo
   endif
 
   let trace_prefix = ""
-  if l:next_coln == l:line_nbytes
+  if l:next_coln == l:line_nbytes && (!(a:mode == 'i' && l:virt_coln == l:line_nbytes + 1))
     " In insert mode before final line char; or normal mode atop final char.
     " In either case, select the final char.
     " Rather than select final column and newline, select just final column.
@@ -501,6 +501,8 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_forward(mode) abo
     endif
 
   elseif l:ref_coln == l:line_nbytes
+    " Already selected to last line, or in Insert mode and at EOL,
+    " select across newline to start of next line.
     if a:mode == 'v'
       let @/ = "\\_$\\zs"
       normal! gvn
