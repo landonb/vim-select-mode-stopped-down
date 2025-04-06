@@ -304,6 +304,8 @@ endfunction
 " -------------------------------------------------------------------
 
 function! g:embrace#alt_select_motion#extend_selection_by_word_reverse(mode) abort
+  set selection=exclusive
+
   " Inhibit |searchcount| messages, which Noice displays as virtual text.
   let l:restore_shm = &shortmess
   set shortmess+=S
@@ -449,6 +451,8 @@ endfunction
 " -------------------------------------------------------------------
 
 function! g:embrace#alt_select_motion#extend_selection_by_word_forward(mode) abort
+  set selection=exclusive
+
   " Inhibit |searchcount| messages, which Noice displays as virtual text.
   let l:restore_shm = &shortmess
   set shortmess+=S
