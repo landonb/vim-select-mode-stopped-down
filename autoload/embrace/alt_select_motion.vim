@@ -451,7 +451,28 @@ endfunction
 " -------------------------------------------------------------------
 
 function! g:embrace#alt_select_motion#extend_selection_by_word_forward(mode) abort
+  " This function technically supports either |selection| mode.
   set selection=exclusive
+  " If we wanted to not force selection=exclusive, disable the
+  " previous line (and the one in _by_word_reverse), and this
+  " function will adjust the selection accordingly. (But we
+  " currently force selection=exclusive in case the user sets
+  " selection=inclusive on demand so that completion snippets
+  " work, and so the user doesn't have to define the <C-S-Right>
+  " map themselves with selection=exclusive. This behavior
+  " follows the mswin.vim behavior, where |keymodel| includes
+  " "startsel" and |selectmode| includes "key", such that shifted
+  " special keys start a Select mode selection. And because by
+  " default, shifted special keys don't start a selection, and
+  " users would start a selection with |v|/|V|/etc., if the user
+  " enables shifted special keys, they probably also want
+  " "exclusive" behavior, which provides a more intuitive
+  " experience than "inclusive". E.g., <Shift-Down> from the
+  " first column when "exclusive" selects just the current line,
+  " whereas <Shift-Down> when "inclusive" also includes the first
+  " character of the next line, which probably isn't what the user
+  " wants.)
+  let inclusive = &selection == 'inclusive' ? 1 : 0
 
   " Inhibit |searchcount| messages, which Noice displays as virtual text.
   let l:restore_shm = &shortmess
@@ -459,9 +480,6 @@ function! g:embrace#alt_select_motion#extend_selection_by_word_forward(mode) abo
   let last_pttrn = @/
   " Sorta the opposite of the pattern in extend_selection_by_word_reverse.
   let @/ = "\\(\\_^\\zs\\|\\>\\|[\[:graph:]]\\zs[\[:blank:]]\\|\\n\\|[^\[:blank:]]\\<\\zs\\)"
-  " This plugin historically assumed "exclusive" &selection, but why not
-  " support both modes. (Also vim.snippet)
-  let inclusive = &selection == 'inclusive' ? 1 : 0
 
   " Unused: ref_coln, virt_coln
   let [
